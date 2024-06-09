@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<users>
+            
+    
+    <user>
+                        
+        
+        <name>Tài Phùng</name>
+                        
+        
+        <email>taiphung@gmail.com</email>
+                        
+        
+        <password>12345</password>
+                        
+        
+        <address>Đà Nẵng</address>
+                    
+    
+    </user>
+        
+
+    <user>
+        <name>Mạnh Tân</name>
+        <email>manhtan@gmail.com</email>
+        <password>1234</password>
+        <address>Đà Nẵng</address>
+    </user>
+</users>
