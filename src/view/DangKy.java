@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.crypto.Cipher;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
@@ -14,18 +13,9 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.util.Base64;
 import java.awt.event.ActionEvent;
 
 import controller.DOM_xml;
-import controller.Security;
 import model.Account;
 
 public class DangKy extends JFrame {

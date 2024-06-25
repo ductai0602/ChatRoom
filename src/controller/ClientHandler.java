@@ -39,11 +39,9 @@ public class ClientHandler extends Thread {
 
     public void run() {
         try {
-            // Read client name and DSA public key
             clientName = in.readLine();
             String encodedDsaPubKey = in.readLine();
 
-            // Decode and store the DSA public key
             byte[] decodedDsaPubKey = Base64.getDecoder().decode(encodedDsaPubKey);
             KeyFactory dsaKeyFactory = KeyFactory.getInstance("DSA");
             X509EncodedKeySpec dsaKeySpec = new X509EncodedKeySpec(decodedDsaPubKey);
@@ -52,26 +50,22 @@ public class ClientHandler extends Thread {
                 clientDSApublicKeys.put(clientName, dsaPubKey);
             }
 
-            // Register the client's PrintWriter
             synchronized (clientWriters) {
                 clientWriters.put(clientName, out);
             }
 
-            // Send RSA public key to the client
             String encodedRsaPubKey = Base64.getEncoder().encodeToString(rsaPubKey.getEncoded());
             out.println(encodedRsaPubKey);
 
-            // Send chat history to the new client
             out.println(ChatServer.getChatHistory());
 
-            // Notify all clients about the new client
-            ChatServer.broadcast(clientName + " has joined the chat");
+            ChatServer.broadcast(clientName + " đã vào phòng chat");
 
             String receivedMsg;
             while ((receivedMsg = in.readLine()) != null) {
                 String[] parts = receivedMsg.split(":", 3);
                 if (parts.length < 3) {
-                    System.out.println("Invalid message format");
+                    System.out.println("Sai định dạng văn bản!");
                     continue;
                 }
                 String sender = parts[0];
@@ -89,7 +83,7 @@ public class ClientHandler extends Thread {
                 }
             }
         } catch (SocketException e) {
-            System.out.println("Connection with client lost");
+            System.out.println(clientName+" đã ngắt kết nối");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -104,7 +98,7 @@ public class ClientHandler extends Thread {
             synchronized (clientWriters) {
                 clientWriters.remove(clientName);
             }
-            ChatServer.broadcast(clientName + " has left the chat");
+            ChatServer.broadcast(clientName + " đã rời khỏi phòng");
         }
     }
 
