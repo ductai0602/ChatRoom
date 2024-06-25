@@ -17,8 +17,11 @@ import java.awt.event.ActionEvent;
 
 import controller.DOM_xml;
 import model.Account;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class DangKy extends JFrame {
+	public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -26,6 +29,7 @@ public class DangKy extends JFrame {
 	private JPasswordField txtPass;
 	private JTextField txtEmail;
 	private JTextField txtAddress;
+	private JButton btnOk;
 
 	/**
 	 * Launch the application.
@@ -55,14 +59,14 @@ public class DangKy extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnThoat = new JButton("");
+		JButton btnThoat = new JButton("Thoát");
 		btnThoat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnThoat.setBounds(378, 10, 48, 39);
+		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnThoat.setBounds(352, 10, 74, 39);
 		contentPane.add(btnThoat);
 		
 		JLabel lblngK = new JLabel("ĐĂNG KÝ");
@@ -72,6 +76,12 @@ public class DangKy extends JFrame {
 		contentPane.add(lblngK);
 		
 		txtName = new JTextField();
+		txtName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validateField();
+			}
+		});
 		txtName.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtName.setColumns(10);
 		txtName.setBounds(144, 163, 248, 39);
@@ -88,6 +98,12 @@ public class DangKy extends JFrame {
 		contentPane.add(lblNewLabel_1_1);
 		
 		txtPass = new JPasswordField();
+		txtPass.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validateField();
+			}
+		});
 		txtPass.setFont(new Font("Tahoma", Font.BOLD, 18));
 		txtPass.setBounds(144, 295, 248, 39);
 		contentPane.add(txtPass);
@@ -103,7 +119,7 @@ public class DangKy extends JFrame {
 		btnDangNhap.setBounds(10, 444, 144, 39);
 		contentPane.add(btnDangNhap);
 		
-		JButton btnOk = new JButton("OK");
+		btnOk = new JButton("OK");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Signup();
@@ -111,9 +127,16 @@ public class DangKy extends JFrame {
 		});
 		btnOk.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnOk.setBounds(304, 444, 122, 39);
+		btnOk.setEnabled(false);
 		contentPane.add(btnOk);
 		
 		txtEmail = new JTextField();
+		txtEmail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validateField();
+			}
+		});
 		txtEmail.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtEmail.setColumns(10);
 		txtEmail.setBounds(144, 231, 248, 39);
@@ -130,6 +153,12 @@ public class DangKy extends JFrame {
 		contentPane.add(lblNewLabel_1_2_1);
 		
 		txtAddress = new JTextField();
+		txtAddress.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validateField();
+			}
+		});
 		txtAddress.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtAddress.setColumns(10);
 		txtAddress.setBounds(144, 360, 248, 39);
@@ -171,5 +200,17 @@ public class DangKy extends JFrame {
 		txtEmail.setText("");
 		txtAddress.setText("");
 		txtPass.setText("");
+	}
+	
+	private void validateField() {
+		String name = txtName.getText();
+		String email = txtEmail.getText();
+		String pass = new String(txtPass.getPassword());
+		String address = txtAddress.getText();
+		if(!name.equals("") && email.matches(emailPattern) && !pass.equals("") && !address.equals("")) {
+			btnOk.setEnabled(true);
+		}else {
+			btnOk.setEnabled(false);
+		}
 	}
 }

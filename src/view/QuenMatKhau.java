@@ -21,12 +21,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class QuenMatKhau extends JFrame {
+	public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
+	private JButton btnFind;
+	private JButton btnOk;
 
 	/**
 	 * Launch the application.
@@ -56,14 +59,14 @@ public class QuenMatKhau extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnThoat = new JButton("");
+		JButton btnThoat = new JButton("Thoát");
 		btnThoat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnThoat.setBounds(378, 10, 48, 39);
+		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnThoat.setBounds(351, 10, 75, 39);
 		contentPane.add(btnThoat);
 		
 		JLabel lblQunMtKhu = new JLabel("QUÊN MẬT KHẨU");
@@ -73,6 +76,12 @@ public class QuenMatKhau extends JFrame {
 		contentPane.add(lblQunMtKhu);
 		
 		textField = new JTextField();
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validateEmail();
+			}
+		});
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		textField.setColumns(10);
 		textField.setBounds(144, 157, 219, 39);
@@ -89,6 +98,12 @@ public class QuenMatKhau extends JFrame {
 		contentPane.add(lblNewLabel_1_1);
 		
 		passwordField = new JPasswordField();
+		passwordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validatePass();
+			}
+		});
 		passwordField.setFont(new Font("Tahoma", Font.BOLD, 18));
 		passwordField.setBounds(144, 245, 248, 39);
 		passwordField.setEditable(false);
@@ -105,7 +120,7 @@ public class QuenMatKhau extends JFrame {
 		btnDangNhap.setBounds(10, 417, 137, 39);
 		contentPane.add(btnDangNhap);
 		
-		JButton btnOk = new JButton("OK");
+		btnOk = new JButton("OK");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ForgotPass();
@@ -113,19 +128,27 @@ public class QuenMatKhau extends JFrame {
 		});
 		btnOk.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnOk.setBounds(304, 417, 122, 39);
+		btnOk.setEnabled(false);
 		contentPane.add(btnOk);
 		
-		JButton btnThoat_1 = new JButton("");
-		btnThoat_1.addActionListener(new ActionListener() {
+		btnFind = new JButton("Tìm");
+		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FindEmail();
 			}
 		});
-		btnThoat_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnThoat_1.setBounds(378, 157, 48, 39);
-		contentPane.add(btnThoat_1);
+		btnFind.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnFind.setBounds(363, 157, 63, 39);
+		btnFind.setEnabled(false);
+		contentPane.add(btnFind);
 		
 		passwordField_1 = new JPasswordField();
+		passwordField_1.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validatePass();
+			}
+		});
 		passwordField_1.setFont(new Font("Tahoma", Font.BOLD, 18));
 		passwordField_1.setBounds(144, 332, 248, 39);
 		passwordField_1.setEditable(false);
@@ -141,11 +164,13 @@ public class QuenMatKhau extends JFrame {
 		// TODO Auto-generated method stub
 		String email = textField.getText();
 		if(DOM_xml.checkEmail(email)) {
-			JOptionPane.showMessageDialog(contentPane, "Email hợp lệ!");
+			JOptionPane.showMessageDialog(contentPane, "Email đã được tìm thấy!");
+			textField.setEditable(false);
+			btnFind.setEnabled(false);
 			passwordField.setEditable(true);
 			passwordField_1.setEditable(true);
 		}else {
-			JOptionPane.showMessageDialog(contentPane, "Email không hợp lệ. Vui lòng nhập lại!");
+			JOptionPane.showMessageDialog(contentPane, "Email không trùng khớp. Vui lòng nhập lại!");
 		}
 	}
 
@@ -169,5 +194,26 @@ public class QuenMatKhau extends JFrame {
 		passwordField_1.setText("");
 		passwordField.setEditable(false);
 		passwordField_1.setEditable(false);
+		textField.setEditable(true);
+		btnFind.setEnabled(true);
+	}
+	
+	private void validateEmail(){
+		String email = textField.getText();
+		if(email.matches(emailPattern)) {
+			btnFind.setEnabled(true);
+		}else {
+			btnFind.setEnabled(false);
+		}
+	}
+	
+	private void validatePass() {
+		String pass1 = new String(passwordField.getPassword());
+		String pass2 = new String(passwordField_1.getPassword());
+		if(!pass1.equals("") && !pass2.equals("") && pass1.equals(pass2)) {
+			btnOk.setEnabled(true);
+		}else {
+			btnOk.setEnabled(false);
+		}
 	}
 }

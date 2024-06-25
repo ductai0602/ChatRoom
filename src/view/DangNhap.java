@@ -19,13 +19,17 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class DangNhap extends JFrame {
+	public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPasswordField txt_Pass;
 	private JTextField txt_Name;
+	private JButton btnOk;
 
 	/**
 	 * Launch the application.
@@ -72,11 +76,23 @@ public class DangNhap extends JFrame {
 		contentPane.add(lblNewLabel_1_1);
 		
 		txt_Pass = new JPasswordField();
+		txt_Pass.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validateField();
+			}
+		});
 		txt_Pass.setFont(new Font("Tahoma", Font.BOLD, 18));
 		txt_Pass.setBounds(144, 257, 248, 39);
 		contentPane.add(txt_Pass);
 		
 		txt_Name = new JTextField();
+		txt_Name.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				validateField();
+			}
+		});
 		txt_Name.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txt_Name.setBounds(144, 189, 248, 39);
 		contentPane.add(txt_Name);
@@ -93,7 +109,7 @@ public class DangNhap extends JFrame {
 		btnDangKy.setBounds(23, 356, 137, 39);
 		contentPane.add(btnDangKy);
 		
-		JButton btnOk = new JButton("OK");
+		btnOk = new JButton("OK");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Login();
@@ -101,6 +117,7 @@ public class DangNhap extends JFrame {
 		});
 		btnOk.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnOk.setBounds(287, 356, 122, 39);
+		btnOk.setEnabled(false);
 		contentPane.add(btnOk);
 		
 		JButton btnQuenMatKhau = new JButton("Quên Mật Khẩu");
@@ -114,14 +131,14 @@ public class DangNhap extends JFrame {
 		btnQuenMatKhau.setBounds(23, 432, 199, 39);
 		contentPane.add(btnQuenMatKhau);
 		
-		JButton btnThoat = new JButton("");
+		JButton btnThoat = new JButton("Thoát");
 		btnThoat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnThoat.setBounds(378, 10, 48, 39);
+		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnThoat.setBounds(355, 10, 71, 39);
 		contentPane.add(btnThoat);
 	}
 
@@ -135,6 +152,16 @@ public class DangNhap extends JFrame {
 			new Home(name).setVisible(true);
 		}else {
 			JOptionPane.showMessageDialog(contentPane, "Đăng nhập không thành công!");
+		}
+	}
+	
+	private void validateField() {
+		String name = txt_Name.getText();
+		String pass = new String(txt_Pass.getPassword());
+		if(!name.equals("") && !pass.equals("")) {
+			btnOk.setEnabled(true);
+		}else {
+			btnOk.setEnabled(false);
 		}
 	}
 }

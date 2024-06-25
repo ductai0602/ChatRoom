@@ -32,6 +32,7 @@ import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class Home extends JFrame {
 
@@ -147,7 +148,7 @@ public class Home extends JFrame {
         contentPane.setLayout(null);
 
         lbl_Name = new JLabel("");
-        lbl_Name.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lbl_Name.setFont(new Font("Tahoma", Font.BOLD, 18));
         lbl_Name.setBounds(10, 10, 361, 30);
         contentPane.add(lbl_Name);
 
@@ -165,14 +166,14 @@ public class Home extends JFrame {
         btnLogout.setBounds(460, 10, 134, 30);
         contentPane.add(btnLogout);
 
-        JButton btnExit = new JButton("");
+        JButton btnExit = new JButton("Thoát");
         btnExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
-        btnExit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        btnExit.setBounds(633, 10, 49, 30);
+        btnExit.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        btnExit.setBounds(604, 10, 78, 30);
         contentPane.add(btnExit);
 
         JScrollPane scrollPane = new JScrollPane();
@@ -204,6 +205,11 @@ public class Home extends JFrame {
         btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
         btnNewButton_2.setBounds(541, 328, 141, 42);
         contentPane.add(btnNewButton_2);
+        
+        JLabel lblNewLabel = new JLabel("");
+        lblNewLabel.setIcon(new ImageIcon(Home.class.getResource("/img/hinh_nen.png")));
+        lblNewLabel.setBounds(-83, 0, 775, 446);
+        contentPane.add(lblNewLabel);
     }
 
     protected void sendMess() {

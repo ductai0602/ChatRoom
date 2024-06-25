@@ -10,13 +10,10 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -36,7 +33,7 @@ public class ChatServer {
     private static PublicKey rsaPubKey;
 
     public static void main(String[] args) {
-        System.out.println("Chat server started...");
+        System.out.println("Server started...");
 
         try (ServerSocket serverSocket = new ServerSocket(12345)) {
             setupRSAKeys();
