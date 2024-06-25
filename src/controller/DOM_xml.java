@@ -2,7 +2,11 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.util.Base64;
 
+import javax.crypto.Cipher;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,6 +25,9 @@ import org.xml.sax.SAXException;
 import model.Account;
 
 public class DOM_xml{
+	
+	private static String  encode;
+	
 	public static void saveToXML(Account user) throws ParserConfigurationException, TransformerException, IOException, SAXException {
         File xmlFile = new File("users.xml");
 
@@ -54,7 +61,7 @@ public class DOM_xml{
         Element userAddress = document.createElement("address");
         userAddress.appendChild(document.createTextNode(user.getAddress()));
         userElement.appendChild(userAddress);
-
+        
         root.appendChild(userElement);
 
         TransformerFactory tfFactory = TransformerFactory.newInstance();
@@ -80,7 +87,7 @@ public class DOM_xml{
                 Element element = (Element) nodeList.item(i);
                 String storedUsername = element.getElementsByTagName("name").item(0).getTextContent();
                 String storedPassword = element.getElementsByTagName("password").item(0).getTextContent();
-
+                
                 if (name.equals(storedUsername) && pass.equals(storedPassword)) {
                     return true;
                 }

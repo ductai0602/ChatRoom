@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+
+import javax.crypto.Cipher;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -20,6 +22,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Signature;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.awt.event.ActionEvent;
 
 public class Home extends JFrame {
@@ -31,6 +42,12 @@ public class Home extends JFrame {
 	private JButton btnNewButton_2;
 	private JTextArea textArea;
 	
+	private static PrivateKey dsaPrivKey;
+    private static PublicKey dsaPubKey;
+    private static PrivateKey rsaPrivKey;
+    private static PublicKey rsaPubKey;
+    private static PublicKey serverRsaPubKey;
+	
 	private Socket socket;
 	private PrintWriter out;
 	private BufferedReader in;
@@ -40,16 +57,36 @@ public class Home extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Home frame = new Home();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		try {
+			KeyPairGenerator dsaKeygen = KeyPairGenerator.getInstance("DSA");
+			dsaKeygen.initialize(1024, new SecureRandom());
+			KeyPair dsaKeys = dsaKeygen.generateKeyPair();
+			dsaPubKey = dsaKeys.getPublic();
+			dsaPrivKey = dsaKeys.getPrivate();
+			
+			KeyPairGenerator rsaKeygen = KeyPairGenerator.getInstance("RSA");
+            rsaKeygen.initialize(2048, new SecureRandom());
+            KeyPair rsaKeys = rsaKeygen.generateKeyPair();
+            rsaPubKey = rsaKeys.getPublic();
+            rsaPrivKey = rsaKeys.getPrivate();
+            
+            SwingUtilities.invokeLater(new Runnable() {
+    			public void run() {
+    				try {
+    					Home frame = new Home();
+    					frame.setVisible(true);
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    					JOptionPane.showMessageDialog(null, "Lỗi kết nối tới Server: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    				}
+    			}
+    		});
+		}catch(Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Lỗi tạo các khóa: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		
 	}
 
 	/**
@@ -66,8 +103,17 @@ public class Home extends JFrame {
 	        out = new PrintWriter(socket.getOutputStream(), true);
 	        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	        name = username;
-	        out.println(name);
 	        lbl_Name.setText(name);
+	        
+	        String encodedDsaPubKey = Base64.getEncoder().encodeToString(dsaPubKey.getEncoded());
+	        out.println(name);
+	        out.println(encodedDsaPubKey);
+	        
+	        String encodedServerRsaPubKey = in.readLine();
+	        byte[] decodedServerRsaPubKey = Base64.getDecoder().decode(encodedServerRsaPubKey);
+	        KeyFactory rsaKeyFactory = KeyFactory.getInstance("RSA");
+	        serverRsaPubKey = rsaKeyFactory.generatePublic(new X509EncodedKeySpec(decodedServerRsaPubKey));
+	        
 	        new Thread(new Runnable() {
 	            @Override
 	            public void run() {
@@ -78,6 +124,10 @@ public class Home extends JFrame {
 	        JOptionPane.showMessageDialog(null, "Không thể kết nối đến server", "Lỗi", JOptionPane.ERROR_MESSAGE);
 	        e.printStackTrace();
 	        System.exit(1); 
+	    } catch(Exception e) {
+	    	JOptionPane.showMessageDialog(null, "Lỗi truyền mã hóa", "Error", JOptionPane.ERROR_MESSAGE);
+	    	e.printStackTrace();
+	    	System.exit(1); 
 	    }
 	}
 	
@@ -154,6 +204,15 @@ public class Home extends JFrame {
 		// TODO Auto-generated method stub
 		String mess = tf_Mess.getText();
 		if(mess != null && !mess.trim().isEmpty()) {
+			try {
+				String encryptedMess = encryptMessage(mess);
+				String signedMess = signMessage(mess);
+				out.println(name + ":" + encryptedMess + ":" + signedMess);
+				tf_Mess.setText("");
+			}catch(Exception e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Lỗi gửi tin nhắn", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 			out.println(mess);
 			tf_Mess.setText("");
 		}
@@ -169,4 +228,19 @@ public class Home extends JFrame {
 			e.printStackTrace();
 		}
 	}
+	
+	private static String encryptMessage(String message) throws Exception {
+        Cipher rsaCipher = Cipher.getInstance("RSA");
+        rsaCipher.init(Cipher.ENCRYPT_MODE, serverRsaPubKey);
+        byte[] encryptedBytes = rsaCipher.doFinal(message.getBytes());
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
+
+    private static String signMessage(String message) throws Exception {
+        Signature signalg = Signature.getInstance("DSA");
+        signalg.initSign(dsaPrivKey);
+        signalg.update(message.getBytes());
+        byte[] signature = signalg.sign();
+        return Base64.getEncoder().encodeToString(signature);
+    }
 }

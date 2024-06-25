@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.crypto.Cipher;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
@@ -13,9 +14,18 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.awt.event.ActionEvent;
 
 import controller.DOM_xml;
+import controller.Security;
 import model.Account;
 
 public class DangKy extends JFrame {
@@ -142,15 +152,17 @@ public class DangKy extends JFrame {
 	    String email = txtEmail.getText();
 	    String pass = new String(txtPass.getPassword());
 	    String address = txtAddress.getText();
-	    Account user = new Account(name, email, pass, address);
 	    if (!name.isEmpty() && !email.isEmpty() && !pass.isEmpty() && !address.isEmpty()) {
 	        if(DOM_xml.checkAccount(name, email)) {
 	        	JOptionPane.showMessageDialog(contentPane, "Tên tài khoản hoặc Email đã được đăng ký");
 	        	clear();
 	        }else {
 	        	try {
-		            DOM_xml.saveToXML(user);
+	                Account user = new Account(name, email, pass, address);
+	                DOM_xml.saveToXML(user);
+	                
 		            JOptionPane.showMessageDialog(contentPane, "Đăng ký thành công");
+		            
 		            setVisible(false);
 		            new DangNhap().setVisible(true);
 		        } catch (Exception e) {
@@ -163,7 +175,7 @@ public class DangKy extends JFrame {
 	        JOptionPane.showMessageDialog(contentPane, "Vui lòng điền thông tin đầy đủ");
 	    }
 	}
-
+	
 	private void clear() {
 		txtName.setText("");
 		txtEmail.setText("");

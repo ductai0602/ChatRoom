@@ -4,7 +4,14 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -21,25 +28,36 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class ChatServer {
-	private static Set<PrintWriter> clientWriters = new HashSet<>();
-    private static Document chatHistoryDoc;
-    private static File chatHistoryFile = new File("chatHistory.xml");
+	private static Document chatHistoryDoc;
+    private static final File chatHistoryFile = new File("chatHistory.xml");
+    private static final Map<String, PublicKey> clientDSApublicKeys = new HashMap<>();
+    private static final Map<String, PrintWriter> clientWriters = new HashMap<>();
+    private static PrivateKey rsaPrivKey;
+    private static PublicKey rsaPubKey;
 
     public static void main(String[] args) {
         System.out.println("Chat server started...");
 
-        try {
+        try (ServerSocket serverSocket = new ServerSocket(12345)) {
+            setupRSAKeys();
             loadChatHistory();
-            ServerSocket serverSocket = new ServerSocket(12345);
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                ClientHandler clientHandler = new ClientHandler(clientSocket, clientWriters);
+                ClientHandler clientHandler = new ClientHandler(clientSocket, rsaPrivKey, rsaPubKey, clientDSApublicKeys, clientWriters);
                 clientHandler.start();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static void setupRSAKeys() throws Exception {
+        KeyPairGenerator rsaKeygen = KeyPairGenerator.getInstance("RSA");
+        rsaKeygen.initialize(2048, new SecureRandom());
+        KeyPair rsaKeys = rsaKeygen.generateKeyPair();
+        rsaPubKey = rsaKeys.getPublic();
+        rsaPrivKey = rsaKeys.getPrivate();
     }
 
     private static void loadChatHistory() throws Exception {
@@ -60,14 +78,14 @@ public class ChatServer {
     private static synchronized void saveChatHistory() throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("indent", "yes");
         DOMSource source = new DOMSource(chatHistoryDoc);
         StreamResult result = new StreamResult(chatHistoryFile);
         transformer.transform(source, result);
     }
 
     public static synchronized void broadcast(String message) {
-        for (PrintWriter writer : clientWriters) {
+        for (PrintWriter writer : clientWriters.values()) {
             writer.println(message);
         }
         saveMessageToHistory(message);

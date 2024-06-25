@@ -5,15 +5,16 @@ public class Account {
 	private String pass;
 	private String email;
 	private String Address;
+	
 	public Account() {
 		
 	}
+	
 	public Account(String name, String email, String pass, String address) {
-		super();
 		this.name = name;
 		this.pass = pass;
 		this.email = email;
-		Address = address;
+		this.Address = address;
 	}
 	public String getName() {
 		return name;

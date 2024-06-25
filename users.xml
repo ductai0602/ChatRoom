@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <users>
-            
+                  
+
+    
     
     <user>
                         
@@ -8,10 +10,10 @@
         <name>Tài Phùng</name>
                         
         
-        <email>taiphung@gmail.com</email>
+        <email>phungtai@gmail.com</email>
                         
         
-        <password>12345</password>
+        <password>V5fAqk/evT/y59g/1Lfl7ObvIYH+Wiwo6IOczdcupURrn2Du+PugEVtlkq5T2xCmgbIWexbXgu4eQuOF6IrQwRJilUKlF73Kry/jl2w1K4w+JycGgTCRN4bawqIghtrTlhmt2PxMeDT0ntAEZrRVBK60sGWGBSg8JzY1O1Li5zbgyUls3czTujsOEljzSDJ0QDCYp252KYtI+4/CH2CADpnl5njVfe8eZM4vrnm9Tjxd2opCwcJZQK8fK3TKPvlm6YmOm+hVIWYW1YB+ryGdjxrnhFCLI753TSxdO3MKzMyLn9QKkMJDzDOK9OUlQmyTDvCQ22TV2MDtsLklzY3+dA==</password>
                         
         
         <address>Đà Nẵng</address>
@@ -19,11 +21,23 @@
     
     </user>
         
-
+    
     <user>
+                
         <name>Mạnh Tân</name>
+                
         <email>manhtan@gmail.com</email>
-        <password>1234</password>
+                
+        <password>gWn4CAp9IX1Hz4yB275L8y4MKBqVSJMjUxPkjDPatO0D+gKC4rY2BXFGuQJOtkYsnMVZ60EQjDsDw5dUPJfHNgrgO/gS4oQ1jeKoCOgEWXFqC9ftLeqT+92GKLtOylokCo1DramMCw05ZWZiuYIQ7h6LmZ5axNPtytXFZw8PvWbIDqrZ+kl+V5J//3r6XuIRSDDyDVTolRX5zIkCTDBUh1i7rUqq8QqJNGqRcWgg+nKExcUwtOQ6Uj5zJrzVh6zETBjspDTFirVX/U13Tuq//9ne7BUAKpsxG1XQsI4VQF+tjGoF72RCyVEX7zJ3CWa9m6sIYXznpBJJuBzdzDi7Gw==</password>
+                
+        <address>Đà Nẵng</address>
+            
+    </user>
+    
+    <user>
+        <name>Đức Tài</name>
+        <email>ductai@gmail.com</email>
+        <password>123</password>
         <address>Đà Nẵng</address>
     </user>
 </users>
