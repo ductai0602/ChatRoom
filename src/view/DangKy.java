@@ -19,6 +19,7 @@ import controller.DOM_xml;
 import model.Account;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
 
 public class DangKy extends JFrame {
 	public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
@@ -163,6 +164,13 @@ public class DangKy extends JFrame {
 		txtAddress.setColumns(10);
 		txtAddress.setBounds(144, 360, 248, 39);
 		contentPane.add(txtAddress);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(DangKy.class.getResource("/img/Hinh_nen_3.png")));
+		lblNewLabel.setBounds(0, 0, 436, 513);
+		contentPane.add(lblNewLabel);
+		
+		this.setLocationRelativeTo(null);
 	}
 
 	protected void Signup() {

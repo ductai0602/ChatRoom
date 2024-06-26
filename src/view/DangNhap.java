@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
 
 public class DangNhap extends JFrame {
 	public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
@@ -140,6 +141,13 @@ public class DangNhap extends JFrame {
 		btnThoat.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnThoat.setBounds(355, 10, 71, 39);
 		contentPane.add(btnThoat);
+		
+		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon(DangNhap.class.getResource("/img/Hinh_nen_3.png")));
+		lblNewLabel_2.setBounds(-121, 0, 736, 666);
+		contentPane.add(lblNewLabel_2);
+		
+		this.setLocationRelativeTo(null);
 	}
 
 	protected void Login() {

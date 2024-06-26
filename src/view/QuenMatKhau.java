@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
 
 public class QuenMatKhau extends JFrame {
 	public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
@@ -30,6 +31,7 @@ public class QuenMatKhau extends JFrame {
 	private JPasswordField passwordField_1;
 	private JButton btnFind;
 	private JButton btnOk;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -138,7 +140,7 @@ public class QuenMatKhau extends JFrame {
 			}
 		});
 		btnFind.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnFind.setBounds(363, 157, 63, 39);
+		btnFind.setBounds(363, 157, 63, 38);
 		btnFind.setEnabled(false);
 		contentPane.add(btnFind);
 		
@@ -158,6 +160,13 @@ public class QuenMatKhau extends JFrame {
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblNewLabel_1_1_1.setBounds(53, 332, 107, 39);
 		contentPane.add(lblNewLabel_1_1_1);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(QuenMatKhau.class.getResource("/img/Hinh_nen_3.png")));
+		lblNewLabel.setBounds(0, 0, 436, 513);
+		contentPane.add(lblNewLabel);
+
+		this.setLocationRelativeTo(null);
 	}
 
 	protected void FindEmail() {
